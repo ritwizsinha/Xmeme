@@ -1,0 +1,18 @@
+POST http://localhost:3000/memes?name=ashok%20kumar&url=https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg&caption=This%20is%20a%20meme
+
+
+###
+GET http://localhost:3000/memes
+
+
+### 
+GET http://localhost:3000/memes/601c2023b96d0b5e98f1ea82
+
+
+###
+PATCH http://localhost:3000/memes/601c2023b96d0b5e98f1ea82 HTTP/1.1
+Content-Type: application/json
+
+{
+    "caption": "This is not a meme"
+}
