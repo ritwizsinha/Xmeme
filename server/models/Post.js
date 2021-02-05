@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const post = new Schema({
-    user: {
+    name: {
         type: String,
         required: true,
     },
-    image: {
+    url: {
         type: String,
         required: true,
     },

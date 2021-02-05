@@ -2,7 +2,7 @@ const express = require('express');
 const Post = require('../models/Post');
 const Router = express.Router();
 
-const getUser = async (req, res, next) => {
+const getPost = async (req, res, next) => {
     let post;
     const id = req.params.id;
     if (!id) {
@@ -10,10 +10,10 @@ const getUser = async (req, res, next) => {
     }
     try {
         post = await Post.findById({ _id: id }).select({
-            "user": 1,
-            "image": 1,
+            "name": 1,
+            "url": 1,
             "caption": 1,
-        }).lean();
+        });
         if (!post) {
             return res.status(404).json({ message: 'No post found' });
         }
@@ -27,16 +27,16 @@ const getUser = async (req, res, next) => {
 Router.get('/memes', async (req, res) => {
     try {
         let posts = await Post.find().select({
-            "user": 1,
-            "image": 1,
+            "name": 1,
+            "url": 1,
             "caption": 1,
             "posted": 1,
         }).sort('posted').limit(100).lean();
 
-        posts = posts.map(({_id, user, image, caption}) => ({
+        posts = posts.map(({_id, name, url, caption}) => ({
             id: _id,
-            name: user,
-            url: image,
+            name,
+            url,
             caption
         }));
         res.send(posts);
@@ -45,43 +45,63 @@ Router.get('/memes', async (req, res) => {
     }
 })
 
-Router.get('/memes/:id', getUser, (req, res) => {
-    const { _id, user, image, caption } = res.post;
+Router.get('/memes/:id', getPost, (req, res) => {
+    const { _id, name, url, caption } = res.post;
     res.status(200).json({
         id: _id,
-        name: user,
-        url: image,
+        name,
+        url,
         caption
     });
 });
 
-Router.patch('/memes/:id', getUser, async (req, res) => {
+Router.patch('/memes/:id', getPost, async (req, res) => {
     if (req.body.caption) {
         res.post.caption = req.body.caption;
     }
     if (req.body.url) {
-        res.post.image = req.body.url;
+        res.post.url = req.body.url;
     }
     try {
         const updatedPost = await res.post.save();
-        res.json(updatedPost);
+        const { _id, name, url, caption } = updatedPost;
+        res.json({
+            id: _id,
+            name,
+            url,
+            caption
+        });
     } catch(err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
 
 Router.post('/memes', async (req, res) => {
-    const post = new Post({
-        user: req.query.name,
-        image: req.query.url,
-        caption: req.query.caption
-    });
-    try {
-        const newPost = await post.save();
-        res.status(201).json({ id: newPost._id });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    const { name, url, caption } = req.query;
+    if (!name || !url || !caption) {
+        res.status(400).json({
+            message: 'Required parameters not found'
+        });
     }
+    const post = await Post.findOne({ name, url, caption }, {}).lean();
+    if (!post) {
+        const post = new Post({
+            name: req.query.name,
+            url: req.query.url,
+            caption: req.query.caption
+        });
+        try {
+            const newPost = await post.save();
+            res.status(201).json({ id: newPost._id });
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
+    } else {
+        res.status(409).json({
+            message: 'Duplicate post',
+        })
+    }
+
 })
 
 

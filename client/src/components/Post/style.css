@@ -1,0 +1,69 @@
+div.post_container {
+    width: 500px;
+    height: 420px;
+    background-color: #1c1e21;
+    margin: 10px auto;
+    border-radius: 20px;
+}
+
+.post_image img {
+    width: 500px;
+    height: 300px;
+}
+
+.post_username {
+    text-align: right;
+    padding: 2px;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    color: white;
+}
+
+.post_caption {
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+}
+
+.post_actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex: 1 1;
+}
+
+.action_like, .action_edit {
+    padding: 10px;
+    width: 50%;
+    text-align: center;
+    color: rgb(176, 179, 184);
+    transition: 0.5s background-color;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.action_like:hover, .action_edit:hover , .action_like_selected:hover{
+    background-color: #686f79;
+}
+
+.post_likes {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.action_like_selected {
+    color: blue;
+    padding: 10px;
+    width: 50%;
+    text-align: center;
+    transition: 0.5s background-color;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}

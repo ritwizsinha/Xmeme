@@ -1,0 +1,91 @@
+.overlay_modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.content_modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(28, 30, 33);
+    min-height: 428px;
+    max-height: 760px;
+    width: 500px;
+    border-radius: 20px;
+    z-index: 1000;
+}
+
+.modal_header {
+    padding: 10px 0 10px 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 100;
+    border-bottom: 0.1px solid rgba(255, 255, 255, 0.568);
+}
+
+.modal_content {
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.input_title {
+    font-size: 16px;
+    color: white;
+    font-weight: 100;
+    text-align: center;
+}
+
+.input_box_container {
+    text-align: center;
+}
+
+.btn {
+    text-align: center;
+}
+
+.btn div {
+    border: 1px solid white;
+    background-color: rgb(28, 30, 33);
+    color:white;
+    font-size: 20px;
+    margin: 20px 0;
+    padding: 5px 100px;
+    outline: none;
+    transition: 0.3s opacity;
+    /* border: none; */
+}
+
+.btn div:hover {
+    opacity: .5;
+}
+
+.error {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: rgb(255, 23, 23);
+    color: white;
+    padding: 10px 0;
+    border-radius: 20px;
+}
+
+
+.success {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 100;
+    background-color:  rgb(34, 231, 34);
+    color: white;
+    padding: 10px 0;
+    border-radius: 20px;
+}
