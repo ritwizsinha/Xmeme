@@ -6,7 +6,7 @@ const Header = ({ text, setText }) => {
     return (
         <div className="header">
             <div className="logo_container">
-                <img src={Logo} className="logo_image" alt="Xmeme Logo Image" />
+                <img src={Logo} className="logo_image" alt="Xmeme Logo" />
             </div>
             <div className="header_content">
                 Meme

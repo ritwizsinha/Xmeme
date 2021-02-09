@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect} from 'react'
 import ReactDOM from 'react-dom';
 import './style.css';
 function Modal({
@@ -7,7 +7,8 @@ function Modal({
     post,
     caption: cp,
     url: u,
-    name: nm
+    name: nm,
+    rerenderList,
 }) {
     const name = useRef(nm);
     const url = useRef(u);
@@ -26,6 +27,12 @@ function Modal({
         )
 
     }
+
+    useEffect(() => {
+        return () => {
+            rerenderList && rerenderList();
+        }
+    }, [rerenderList])
 
     const Button = ({ action, placeholder }) => {
         return (
@@ -50,6 +57,9 @@ function Modal({
                 setError(res.error);
             } else {
                 setSaveSuccess(true);
+                setTimeout(() => {
+                    close();
+                }, 2000);
             }
         } else {
             setError("All fields are not filled");

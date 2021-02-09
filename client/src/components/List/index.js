@@ -11,18 +11,17 @@ const STATE = {
 const List = () => {
     const [state, setState] = useState(STATE.LOADING);
     const [posts, setPosts] = useState([]);
-    useEffect(() => {  
-        const f = async () => {
-            try {
-                const res = await axios.get(`${SERVER_URL}/memes`);
-                setState(STATE.LOADED);
-                setPosts(res.data);
-                console.log(res);
-            } catch(err) {
-                setState(STATE.ERROR);
-            }
+    const loadMemes = async () => {
+        try {
+            const res = await axios.get(`${SERVER_URL}/memes`);
+            setState(STATE.LOADED);
+            setPosts(res.data);
+        } catch(err) {
+            setState(STATE.ERROR);  
         }
-        f();
+    }
+    useEffect(() => {
+        loadMemes();
     },[]);
     const LoadingState = () => {
         return (
@@ -44,7 +43,7 @@ const List = () => {
         return (
             <div className="list_loaded">
                 {
-                    posts.map(({ id, name, url, caption }, index) => <Post key={index} id={id} name={name} url={url} caption={caption}/>)
+                    posts.map(({ id, name, url, caption }, index) => <Post key={index} id={id} name={name} url={url} caption={caption} rerenderList={loadMemes}/>)
                 }
             </div>
         )

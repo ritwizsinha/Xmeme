@@ -1,16 +1,26 @@
 div.post_container {
-    width: 500px;
-    height: 420px;
+    width: 620px;
+    height: auto;
     background-color: #1c1e21;
     margin: 10px auto;
     border-radius: 20px;
 }
 
 .post_image img {
-    width: 500px;
-    height: 300px;
+    width: 620px;
+    height: 506px;
 }
 
+.post_image div {
+    width: 620px;
+    height: 506px;
+    text-align: center;
+    margin: auto;
+    color: white;
+    font-size: 30px;
+    padding: 10px 0;
+    font-weight: bold;
+}
 .post_username {
     text-align: right;
     padding: 2px;
@@ -20,9 +30,18 @@ div.post_container {
     color: white;
 }
 
+.loading {
+    margin: auto;
+}
+
+.invisible {
+    display: none;
+}
+
 .post_caption {
-    padding: 10px 5px;
-    text-align: center;
+    margin: 0 10px;
+    padding: 20px 5px;
+    text-align: left;
     font-size: 16px;
     font-weight: 600;
     color: white;

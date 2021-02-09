@@ -26,6 +26,8 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 const postMiddleware = require('./routes/Post');
+const likeMiddleware = require('./routes/Like');
 app.use(postMiddleware);
+app.use(likeMiddleware);
 
 app.listen(process.env.PORT, () => console.log('Server started'));

@@ -1,4 +1,4 @@
-POST http://localhost:5000/memes?name=manoj%20kumar&url=https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg&caption=This%20is%20a%20meme
+POST http://localhost:5000/memes?name=manoj%20kumar&url=https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg&caption=This%20is%20a%20mem
 
 
 ###
@@ -6,13 +6,16 @@ GET http://localhost:5000/memes
 
 
 ### 
-GET http://localhost:5000/memes/601d035c237b6d652895d4da
+GET http://localhost:5000/memes/601d7dcf7af052877a2fa70b
 
 
 ###
-PATCH http://localhost:5000/memes/601d035c237b6d652895d4da HTTP/1.1
+PATCH http://localhost:5000/memes/60213d541d41326691ffaa2f HTTP/1.1
 Content-Type: application/json
 
 {
-    "caption": "This is shi"
+    "caption": "This is a"
 }
+###
+
+POST http://localhost:5000/like/60213d541d41326691ffaa2f HTTP/1.1

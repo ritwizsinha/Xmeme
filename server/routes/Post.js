@@ -17,12 +17,12 @@ const getPost = async (req, res, next) => {
         if (!post) {
             return res.status(404).json({ message: 'No post found' });
         }
-    } catch(err) {
+    } catch (err) {
         return res.status(500).json({ message: err.message });
     }
     res.post = post;
     next();
-} 
+}
 
 Router.get('/memes', async (req, res) => {
     try {
@@ -30,17 +30,17 @@ Router.get('/memes', async (req, res) => {
             "name": 1,
             "url": 1,
             "caption": 1,
-            "posted": 1,
-        }).sort('posted').limit(100).lean();
+        }).sort({ _id: -1 }).limit(100).lean();
+        console.log(posts);
 
-        posts = posts.map(({_id, name, url, caption}) => ({
+        posts = posts.map(({ _id, name, url, caption }) => ({
             id: _id,
             name,
             url,
             caption
         }));
         res.send(posts);
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 })
@@ -56,22 +56,30 @@ Router.get('/memes/:id', getPost, (req, res) => {
 });
 
 Router.patch('/memes/:id', getPost, async (req, res) => {
-    if (req.body.caption) {
-        res.post.caption = req.body.caption;
+    const { caption, url } = req.body;
+    if (caption) {
+        res.post.caption = caption;
     }
-    if (req.body.url) {
-        res.post.url = req.body.url;
+    if (url) {
+        res.post.url = url;
     }
     try {
-        const updatedPost = await res.post.save();
-        const { _id, name, url, caption } = updatedPost;
-        res.json({
-            id: _id,
-            name,
-            url,
-            caption
-        });
-    } catch(err) {
+        const post = await Post.findOne({ caption: res.post.caption, url: res.post.url }).lean();
+        if (!post) {
+            const updatedPost = await res.post.save();
+            const { _id, name, url, caption } = updatedPost;
+            res.json({
+                id: _id,
+                name,
+                url,
+                caption
+            });
+        } else {
+            res.status(409).json({
+                message: 'Duplicate post',
+            })
+        }
+    } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });

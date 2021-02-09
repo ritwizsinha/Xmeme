@@ -8,7 +8,7 @@ const CreatePost = () => {
     const [open, setOpen] = useState(false);
     const post = async (name, url, caption) => {
         try {
-            const res =  await axios.post(`${SERVER_URL}/memes?name=${name}&url=${url}&caption=${caption}`);
+            await axios.post(`${SERVER_URL}/memes?name=${name}&url=${url}&caption=${caption}`);
             return {
                 
             }

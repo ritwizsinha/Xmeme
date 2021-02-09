@@ -33,7 +33,6 @@ export const Form = () => {
     const [user, setUser] = useState('');
     const [url, setUrl] = useState('');
     const [caption, setCaption] = useState('');
-    console.log(user, url, caption);
     const showImage = () => {
         if (url) {
             return (
