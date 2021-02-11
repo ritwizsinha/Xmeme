@@ -55,7 +55,7 @@ const likeMiddleware = require('./routes/Like');
 app.use(postMiddleware);
 app.use(likeMiddleware);
 
-swaggerApp.listen(process.env.SWAGGER_PORT, () => {
+swaggerApp.listen(SWAGGER_PORT, () => {
     console.log('Swagger up and running on '+ process.env.SWAGGER_PORT)
 });
-app.listen(process.env.PORT, () => console.log('Server started'));
+app.listen(PORT, () => console.log('Server started'));
