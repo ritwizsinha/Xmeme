@@ -1,4 +1,5 @@
 #!/bin/bash
-cd server
+source ~/.bashrc
+cd server/
 npm install
 npm start
