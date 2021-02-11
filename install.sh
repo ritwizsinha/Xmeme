@@ -13,6 +13,7 @@ sudo systemctl enable mongod
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
 chmod +x ~/.nvm/nvm.sh
 ~/.nvm/nvm.sh
+source ~/.bashrc
 nvm install node
 node -v
 npm -v
