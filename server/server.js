@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
+const SERVER_URL="http://localhost:8081"
+const SWAGGER_URL="http://localhost:8080"
+const DATABASE_URL="mongodb://localhost:27017"
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
