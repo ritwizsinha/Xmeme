@@ -6,6 +6,9 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const SERVER_URL="http://localhost:8081"
 const SWAGGER_URL="http://localhost:8080"
 const DATABASE_URL="mongodb://localhost:27017"
+const SWAGGER_PORT = 8080
+const PORT=8081
+
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
