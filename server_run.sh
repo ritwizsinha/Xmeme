@@ -1,4 +1,4 @@
 #!/bin/bash
-cd xmeme/server
+cd server
 npm install
 npm start
