@@ -1,5 +1,6 @@
 .create_post_container {
-    width: 600px;
+    max-width: 600px;
+    min-width: auto;
     background-color: rgb(58, 59, 60);
     color: white;
     font-size: 20px;
@@ -13,4 +14,10 @@
 
 .create_post_container:hover {
     background-color: rgb(124, 126, 128);
+}
+
+@media only screen and (max-width: 520px) {
+    .create_post_container {
+        margin: 0;
+    }
 }

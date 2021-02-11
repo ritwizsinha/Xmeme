@@ -1,12 +1,12 @@
 .main_container {
     min-height: 100vh;
     height: auto;
-    background-color: #242526;
+    background-color: rgba(14, 14, 14, 0.9);
     position: relative;
 }
 
 .secondary_container {
-    width: 1000px;
+    max-width: 1000px;
     margin: 0 auto;
     height: 100%;
     padding: 40px 20px;   

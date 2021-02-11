@@ -1,18 +1,18 @@
 div.post_container {
-    width: 620px;
+    max-width: 620px;
     height: auto;
     background-color: #1c1e21;
-    margin: 10px auto;
+    margin: 30px auto;
     border-radius: 20px;
 }
 
 .post_image img {
-    width: 620px;
+    width: 100%;
     height: 506px;
 }
 
 .post_image div {
-    width: 620px;
+    max-width: 620px;
     height: 506px;
     text-align: center;
     margin: auto;
@@ -42,7 +42,7 @@ div.post_container {
     margin: 0 10px;
     padding: 20px 5px;
     text-align: left;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: 600;
     color: white;
 }
@@ -64,6 +64,7 @@ div.post_container {
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 20px;
 }
 .action_like:hover, .action_edit:hover , .action_like_selected:hover{
     background-color: #686f79;
@@ -85,4 +86,35 @@ div.post_container {
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+}
+
+@media only screen and (max-width: 520px) {
+    div.post_container {
+        margin: 10px auto;
+    }
+    .post_image img {
+        width: 100%;
+        height: 306px;
+    }
+    .post_image div {
+        max-width: 620px;
+        height: 306px;
+        text-align: center;
+        margin: auto;
+        color: white;
+        font-size: 30px;
+        padding: 10px 0;
+        font-weight: bold;
+    }
+    .post_caption {
+        margin: 0 5px;
+        padding: 10px 5px;
+        font-size: 16px;
+    }
+    
+    .action_like, .action_edit {
+        padding: 5px;
+        border-radius: 10px;
+        font-size: 16px;
+    }
 }

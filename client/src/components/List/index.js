@@ -1,32 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { SERVER_URL } from '../../constants';
-import axios from 'axios';
+import React, { useContext } from 'react';
 import Post from '../Post';
+import './style.css';
+import { STATE } from '../../constants';
+import { PostContext } from '../../Context';
 
-const STATE = {
-    LOADING: 0,
-    LOADED: 1,
-    ERROR: 2,
-}
 const List = () => {
-    const [state, setState] = useState(STATE.LOADING);
-    const [posts, setPosts] = useState([]);
-    const loadMemes = async () => {
-        try {
-            const res = await axios.get(`${SERVER_URL}/memes`);
-            setState(STATE.LOADED);
-            setPosts(res.data);
-        } catch(err) {
-            setState(STATE.ERROR);  
-        }
-    }
-    useEffect(() => {
-        loadMemes();
-    },[]);
+    const context = useContext(PostContext);
+    const state = context.state;
+    const posts = context.posts;
+    const searchText = context.searchText;
+    const modifiedPosts = posts.filter(({ caption }) => caption.includes(searchText));
     const LoadingState = () => {
         return (
             <div className="list_loading">
-                Loading
+                Loading....
             </div>
         )
     }
@@ -34,7 +21,7 @@ const List = () => {
     const ErrorState = () => {
         return (
             <div className="list_error">
-                Error in loading Posts
+                Error in Loading Posts....
             </div>
         )
     }
@@ -43,15 +30,26 @@ const List = () => {
         return (
             <div className="list_loaded">
                 {
-                    posts.map(({ id, name, url, caption }, index) => <Post key={index} id={id} name={name} url={url} caption={caption} rerenderList={loadMemes}/>)
+                    modifiedPosts
+                    .map(({ id, name, url, caption }, index) => <Post key={index} id={id} name={name} url={url} caption={caption}/>)
                 }
             </div>
         )
     }
+
+    const NoPosts = () => {
+        return (
+            <div className="list_empty">
+                No Posts Found...
+            </div>
+        )
+    }
+
     return (
         <div className="list_container">
             {(state === STATE.LOADING) && <LoadingState />}
-            {(state === STATE.LOADED) && <LoadedState />}
+            {(state === STATE.LOADED) && posts.length > 0 && <LoadedState />}
+            {(state === STATE.LOADED) && modifiedPosts.length === 0 && <NoPosts />}
             {(state === STATE.ERROR) && <ErrorState />}
         </div>
     )

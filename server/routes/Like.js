@@ -14,8 +14,12 @@ const getLikeMiddleware = async (req, res, next) => {
         if (!like) {
             next();
         } else {
-            return res.status(409).json({
-                message: 'duplicate like',
+            await Like.remove({
+                ip,
+                post: postId,
+            }).lean()
+            return res.status(200).json({
+                message: "Like removed",
             })
         }
     } catch (err) {
@@ -28,16 +32,47 @@ const getLikeMiddleware = async (req, res, next) => {
 Router.get('/like/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const likes = Like.find({
-            post: id
-        }).count();
+        const likes = await Like.countDocuments({
+            post: id,
+        })
         return res.status(200).json({
             likes,
         })
     } catch(err) {
-        return res.status(500),json({
-            message: err.message
+        console.log("Inside error");
+        console.error(err);
+        return res.status(500).json({
+            likes: 0,
+            message: err && err.message ? err.message : err
         });
+    }
+})
+
+Router.get('/like/me/:id', async (req, res) => {
+    const id = req.params.id;
+    const ip = getIpFromReq(req);
+    try {
+        const me = await Like.find({
+            post: id,
+            ip,
+        }, {}).lean();
+        console.log(me);
+        if (!me) {
+            return res.status(200).json({
+                liked: me,
+                message: 'Like not found',
+            })
+        } else {
+            return res.status(200).json({
+                like: me,
+                message: 'Like found',
+            })
+        }
+    } catch(err) {
+        console.error(err);
+        return res.status(500).json({
+            message: err && err.message ? err.message : err
+        })
     }
 })
 
@@ -56,7 +91,7 @@ Router.post('/like/:id', getLikeMiddleware, async (req, res) => {
         res.status(201).json(newLike);
     } catch (err) {
         res.status(500).json({
-            message: err.message
+            message: err && err.message ? err.message : err
         })
     }
 

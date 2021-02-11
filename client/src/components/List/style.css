@@ -1,0 +1,26 @@
+.list_error {
+    text-align: center;
+    height: 100%;
+    margin: 400px 0;
+    padding: 20px 0;
+    font-size: 30px;
+    color: wheat;
+}
+
+.list_loading {
+    text-align: center;
+    height: 100%;
+    margin: 400px 0;
+    padding: 20px 0;
+    font-size: 30px;
+    color: wheat;
+}
+
+.list_empty {
+    text-align: center;
+    height: 100%;
+    margin: 400px 0;
+    padding: 20px 0;
+    font-size: 30px;
+    color: wheat;
+}

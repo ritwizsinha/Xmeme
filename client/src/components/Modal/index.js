@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect} from 'react'
+import React, { useState, useRef, useContext, useEffect} from 'react'
 import ReactDOM from 'react-dom';
 import './style.css';
+import { PostContext } from '../../Context';
 function Modal({
     isOpen,
     close,
@@ -8,8 +9,9 @@ function Modal({
     caption: cp,
     url: u,
     name: nm,
-    rerenderList,
+    edit,
 }) {
+    const loadMemes = useContext(PostContext).loadMemes;
     const name = useRef(nm);
     const url = useRef(u);
     const caption = useRef(cp);
@@ -21,18 +23,12 @@ function Modal({
             <div className="modal_input">
                 <div className="input_title">{title}</div>
                 <div className="input_box_container">
-                    <input type={type} placeholder={placeholder} defaultValue={refr.current} onChange={(e) => refr.current = e.target.value} className="input_box" />
+                    <input type={type} placeholder={placeholder} defaultValue={refr.current} onChange={(e) => refr.current = e.target.value} className="input_box_2" />
                 </div>
             </div>
         )
 
     }
-
-    useEffect(() => {
-        return () => {
-            rerenderList && rerenderList();
-        }
-    }, [rerenderList])
 
     const Button = ({ action, placeholder }) => {
         return (
@@ -57,7 +53,8 @@ function Modal({
                 setError(res.error);
             } else {
                 setSaveSuccess(true);
-                setTimeout(() => {
+                setTimeout(async () => {
+                    await loadMemes();
                     close();
                 }, 2000);
             }
@@ -83,6 +80,14 @@ function Modal({
         }
         return null;
     }
+
+    useEffect(() => {
+        return () => {
+            name.current = '';
+            url.current = '';
+            caption.current = '';
+        }
+    }, [])
     if (isOpen) {
         return ReactDOM.createPortal(
             <>
@@ -92,12 +97,12 @@ function Modal({
                         Create a Meme Post
                     </div>
                     <div className="modal_content">
-                        <Input
+                        {!edit && <Input
                             type="text"
                             title="Add name"
                             placeholder="Add a name..."
                             refr={name}
-                        />
+                        />}
                         <Input
                             type="url"
                             title="Add Image Url"

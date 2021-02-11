@@ -11,9 +11,10 @@
 
 .logo_container {
     text-align: left;
-    width: 2%;
-    height: 100%;
-    padding: 0 10px;
+    width: 30px;
+    height: 30px;
+    padding:0 5px 0 10px;
+    margin: 15px 0;
 }
 
 .logo_image {
@@ -29,11 +30,11 @@
 .search_box {
     width: 100%;
     height: 100%;
-    text-align: right;
+    text-align: left;
 }
 
 .input_box {
-    width: 400px;
+    max-width: 100%;
     padding: 10px 25px;
     border-radius: 20px;
     border: 1px solid white;
@@ -41,6 +42,16 @@
     font-weight: 100;
     color: rgb(250, 234, 234);
     font-size: 20px;
-    margin:  5px 0;
+    margin:  5px 10px;
     outline: none;
+}
+
+@media only screen and (max-width: 520px) {
+    .logo_container, .header_content {
+        display: none;
+    }
+    .input_box {
+        margin: 5px;
+        padding: 10px 10px;
+    }
 }

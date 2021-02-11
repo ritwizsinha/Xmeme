@@ -1,0 +1,142 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "XMeme API",
+        "description": "API for XMEME appplication",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8081",
+    "basePath": "/",
+    "paths": {
+        "/memes": {
+            "get": {
+                "summary": "Get list of 100 memes in reverse chronological order",
+                "description": "Returns list of 100 recent memes posted",
+                "responses": {
+                    "200": {
+                        "description": "List of memes",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "type": "string"
+                                    },
+                                    "caption": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error in fetching memes",
+                        "schema": {
+                            "type": "json",
+                            "items": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "API to post a meme",
+                "description": "Posts a meme",
+                "requestBody": {
+                    "content": "application/json",
+                    "schema": {
+                        
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Posts a meme",
+                        "schema": {
+                            "type": "json",
+                            "items": {
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Posted Duplicate meme",
+                        "schema": {
+                            "type": "json",
+                            "items": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Server Error in fetching memes",
+                        "schema": {
+                            "type": "json",
+                            "items": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error in fetching memes",
+                        "schema": {
+                            "type": "json",
+                            "items": {
+                                "properties": {
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Memes",
+            "description": "API for Meme posts made"
+        },
+        {
+            "name": "Like",
+            "description": "Api for Likes made"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
+}

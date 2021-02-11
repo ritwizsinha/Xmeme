@@ -24,6 +24,24 @@ const getPost = async (req, res, next) => {
     next();
 }
 
+/**
+ * @swagger
+ * /memes:
+ *  get:
+ *      description: Get 100 recent Posted memes
+ *      responses: 
+ *          '200': 
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              id: 
+ *                              type: string
+ *          '500':
+ *              description: Server Error
+ */
 Router.get('/memes', async (req, res) => {
     try {
         let posts = await Post.find().select({
@@ -31,7 +49,6 @@ Router.get('/memes', async (req, res) => {
             "url": 1,
             "caption": 1,
         }).sort({ _id: -1 }).limit(100).lean();
-        console.log(posts);
 
         posts = posts.map(({ _id, name, url, caption }) => ({
             id: _id,
@@ -39,7 +56,7 @@ Router.get('/memes', async (req, res) => {
             url,
             caption
         }));
-        res.send(posts);
+        res.status(200).send(posts);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -85,7 +102,8 @@ Router.patch('/memes/:id', getPost, async (req, res) => {
 });
 
 Router.post('/memes', async (req, res) => {
-    const { name, url, caption } = req.query;
+    const { name, url, caption } = req.body;
+    console.log(req.body);
     if (!name || !url || !caption) {
         res.status(400).json({
             message: 'Required parameters not found'
@@ -94,9 +112,9 @@ Router.post('/memes', async (req, res) => {
     const post = await Post.findOne({ name, url, caption }, {}).lean();
     if (!post) {
         const post = new Post({
-            name: req.query.name,
-            url: req.query.url,
-            caption: req.query.caption
+            name,
+            url,
+            caption,
         });
         try {
             const newPost = await post.save();

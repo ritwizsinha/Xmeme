@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './style.css';
 import Modal from '../Modal';
@@ -18,20 +18,18 @@ const Post = ({
     const [open, setOpen] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
+    const [totalLikes, setTotalLikes] = useState(0);
 
     const post = async (
         name,
         url,
         caption,
     ) => {
-        console.log(name, caption, url);
         try {
-            const res = await axios.patch(`${SERVER_URL}/memes/${id}`, {
-                name,
+            await axios.patch(`${SERVER_URL}/memes/${id}`, {
                 caption,
                 url,
             });
-            console.log(res);
             return {
 
             }
@@ -41,6 +39,44 @@ const Post = ({
             }
         }
     }
+    const triggerLike = async () => {
+        try {
+            await axios.post(`${SERVER_URL}/like/${id}`, {});
+        } catch(err) {
+            console.error(err);
+        }
+    }
+    const getLikes = async () => {
+        try {
+            return await axios.get(`${SERVER_URL}/like/${id}`);
+        } catch(err) {
+            console.error(err);
+            return {
+                likes: 0,
+            };
+        }
+    }
+
+    const getUserLiked = async () => {
+        try {
+            return await axios.get(`${SERVER_URL}/like/me/${id}`);
+        } catch(err) {
+            return {
+                liked: false,
+            }
+        }
+    }
+    useEffect(() => {
+        const f = async () => {
+            let res = await getUserLiked();
+            if (res.data.liked) {
+                setLiked(true);
+            }
+            res = await getLikes();
+            setTotalLikes(res.data.likes);
+        }
+        f();
+    }, []);
     return (
         <>
             <div className="post_container">
@@ -66,10 +102,14 @@ const Post = ({
                     Posted By: {name}
                 </div>
                 <div className="post_likes">
-                    You and 470 others
+                    {liked ? `You and ${totalLikes} others` : `${totalLikes} people` } liked this
             </div>
                 <div className="post_actions">
-                    <div className={liked ? "action_like_selected" : "action_like"} onClick={() => setLiked((liked) => !liked)} >
+                    <div className={liked ? "action_like_selected" : "action_like"} onClick={() => setLiked(async (liked) => {
+                        await triggerLike();
+                        console.log("This runs");
+                        return !liked
+                    })} >
                         Like
                 </div>
                     <div className="action_edit" onClick={() => setOpen(true)}>
@@ -77,7 +117,7 @@ const Post = ({
                     </div>
                 </div>
             </div>
-            <Modal isOpen={open} caption={caption} close={() => setOpen(open => !open)} name={name} url={url} key={id} post={post} rerenderList={rerenderList} />
+            <Modal isOpen={open} caption={caption} close={() => setOpen(open => !open)} name={name} url={url} key={id} post={post} edit={true}/>
         </>
     )
 }

@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1000;
 }
 
@@ -16,7 +16,8 @@
     background-color: rgb(28, 30, 33);
     min-height: 428px;
     max-height: 760px;
-    width: 500px;
+    max-width: 500px;
+    min-width: 400px;
     border-radius: 20px;
     z-index: 1000;
 }
@@ -60,7 +61,7 @@
     padding: 5px 100px;
     outline: none;
     transition: 0.3s opacity;
-    /* border: none; */
+    border-radius: 20px;
 }
 
 .btn div:hover {
@@ -88,4 +89,62 @@
     color: white;
     padding: 10px 0;
     border-radius: 20px;
+}
+.input_box_2 {
+    width: 400px;
+    padding: 10px 35px;
+    border-radius: 20px;
+    border: 1px solid white;
+    background-color: rgb(58, 59, 60);
+    font-weight: 100;
+    color: rgb(250, 234, 234);
+    font-size: 20px;
+    margin:  5px 10px;
+    outline: none;
+}
+
+
+@media only screen and (max-width: 520px) {
+    .content_modal {
+        max-height: 460px;
+        width: 90%;
+        min-width: 300px;
+        min-height: 400px;
+    }
+    
+    .modal_header {
+        padding: 10px 0 10px 0;
+        font-size: 18px;
+    }
+    
+    .modal_content {
+        padding: 5px;
+    }
+
+    .btn div {
+        font-size: 18px;
+        margin: 15px 0;
+        padding: 5px 40px;
+    }
+    .error {
+        font-size: 18px;
+    }
+    
+    
+    .success {
+        font-size: 18px;
+    }
+
+    .input_box_2 {
+        width: 200px;
+        padding: 10px 35px;
+        border-radius: 20px;
+        border: 1px solid white;
+        background-color: rgb(58, 59, 60);
+        font-weight: 100;
+        color: rgb(250, 234, 234);
+        font-size: 20px;
+        margin:  5px 10px;
+        outline: none;
+    }
 }
