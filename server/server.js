@@ -31,7 +31,7 @@ swaggerApp.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 app.use(cors());
 swaggerApp.use(cors());
 require('dotenv').config();
-mongoose.connect(process.env.DATABASE_URL, {
+mongoose.connect(DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
