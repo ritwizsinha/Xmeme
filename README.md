@@ -1,5 +1,7 @@
 ## X-MEME
 A platform for users to match the hilarious imemeges to their even more hilarious captions.
+The [app](https://xmemeclient.herokuapp.com/) can be found here.
+The [server](https://xmeme-api-server.herokuapp.com/) can be found here.
 <div>
 <img src="./client/public/cover.png" width=800px height=600px>
 </div>
@@ -59,10 +61,10 @@ For stopping the server image container run
 docker-compose down
 ```
 
-#### Swagger
+### Swagger
 Once the server is running go to localhost:8080/swagger-ui to see the list of api endpoints
 
-#### Tech Stack
+### Tech Stack
 The client side is built with:
 - React
 - Html
