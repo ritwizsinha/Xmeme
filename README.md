@@ -14,6 +14,9 @@ The [server](https://xmeme-api-server.herokuapp.com/) can be found here.
 - Viewing the total likes on meme post
 - Responsive UI
 - Searching for your favourite meme captions
+- Supports https
+- Supports Swagger
+- Dockerised application
 
 
 ### Installation
