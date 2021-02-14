@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState, useCallback } from 'react'
 import ReactDOM from 'react-dom';
 import './style.css';
 import { PostContext } from '../../Context';
+// Notification manager helps in issuing out notifications
 import { NotificationManager } from 'react-notifications';
 import axios from 'axios';
-
+// Modal component for posting and editing memes
 function Modal({
     isOpen,
     close,
@@ -14,7 +15,9 @@ function Modal({
     name: nm,
     edit,
 }) {
+    // Using context api hook to access global state
     const loadMemes = useContext(PostContext).loadMemes;
+    // Setting the url, name and caption to state variables
     const [url, setUrl]= useState(u);
     const [name, setName] = useState(nm);
     const [caption, setCaption] = useState(cp);
@@ -41,7 +44,7 @@ function Modal({
             </div>
         )
     }
-
+    // Action when post button is clicked
     const postAction = async () => {
         if (name && url && caption) {
             const res = await post(name, url, caption);
@@ -57,6 +60,7 @@ function Modal({
         }
     }
 
+    // Pinging the imgflip meme  url api for getting 100 image urls, and randomize among them when 'load random url' is clicked
     useEffect(() => {
         const f = async () => {
             const { data }  = await axios.get('https://api.imgflip.com/get_memes');
@@ -108,7 +112,7 @@ function Modal({
                     </div>
                     <div className="modal_image_preview">
                             <div className="image_container">
-                            { (url || u) && <img src={url || u} /> }
+                            { (url || u) && <img src={url || u} alt="Options to choose from"/> }
                             </div>
                     </div>
 

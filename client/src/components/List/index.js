@@ -3,13 +3,16 @@ import Post from '../Post';
 import './style.css';
 import { STATE } from '../../constants';
 import { PostContext } from '../../Context';
-
+// List component listing all the posted meme
 const List = () => {
+    // Using the context hook to access global state
     const context = useContext(PostContext);
     const state = context.state;
     const posts = context.posts;
     const searchText = context.searchText;
+    // Posts array filtered with the searched text
     const modifiedPosts = posts.filter(({ caption }) => caption.includes(searchText));
+    // JSX for loading state
     const LoadingState = () => {
         return (
             <div className="list_loading">
@@ -17,7 +20,7 @@ const List = () => {
             </div>
         )
     }
-
+    // JSX for error state
     const ErrorState = () => {
         return (
             <div className="list_error">
@@ -25,7 +28,7 @@ const List = () => {
             </div>
         )
     }
-
+    // JSX for loaded state
     const LoadedState = () => {
         return (
             <div className="list_loaded">
@@ -36,7 +39,7 @@ const List = () => {
             </div>
         )
     }
-
+    // JSX for empty posts state
     const NoPosts = () => {
         return (
             <div className="list_empty">
@@ -44,7 +47,7 @@ const List = () => {
             </div>
         )
     }
-
+    // Rendering all states according to application state
     return (
         <div className="list_container">
             {(state === STATE.LOADING) && <LoadingState />}

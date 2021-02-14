@@ -80,9 +80,7 @@ Router.patch('/memes/:id', getPost, async (req, res) => {
     const { caption, url } = req.body;
     // The post should have a valid url
     if (!(await isValidImageUrl(url))) {
-        res.status(400).json({
-            message: 'Invalid image url'
-        });
+        return res.status(400).send();
     }
     if (caption) {
         res.post.caption = caption;
@@ -95,18 +93,12 @@ Router.patch('/memes/:id', getPost, async (req, res) => {
         const post = await Post.findOne({ caption: res.post.caption, url: res.post.url }).lean().exec();
         if (!post) {
             const updatedPost = await res.post.save();
-            const { _id, name, url, caption } = updatedPost;
-            res.json({
-                id: _id,
-                name,
-                url,
-                caption
-            });
+            return res.status(200).send();
         } else {
-            res.status(409).send();
+            return res.status(409).send();
         }
     } catch (err) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 // Route to post a meme
@@ -120,7 +112,7 @@ Router.post('/memes', async (req, res) => {
     }
     // The post should have a valid url
     if (!(await isValidImageUrl(url))) {
-        res.status(400).json({
+        return res.status(400).json({
             message: 'Invalid image url'
         });
     }

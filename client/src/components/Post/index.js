@@ -7,7 +7,7 @@ import axios from 'axios';
 import loadingGIF from '../../public/Loading.gif';
 import errorGIF from '../../public/error.gif';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
-
+// Component for for handling the state and actions on a single post
 const Post = ({
     id,
     name,
@@ -15,12 +15,20 @@ const Post = ({
     caption,
     rerenderList,
 }) => {
+    // Denotes whether the current user liked the post or not
     const [liked, setLiked] = useState(false);
+    // Modal visible or not
     const [open, setOpen] = useState(false);
+
+    // If the image link provided loaded or not
     const [loaded, setLoaded] = useState(false);
+    // If there was some error
     const [error, setError] = useState(false);
+
+    // Total likes for this post
     const [totalLikes, setTotalLikes] = useState(0);
 
+    // Post action to be passed to the modal for meme post editing
     const post = async (
         name,
         url,
@@ -41,6 +49,7 @@ const Post = ({
         }
     }
 
+    // Function for getting the total likes to a post
     const getLikes = async () => {
         try {
             return await axios.get(`${SERVER_URL}/like/${id}`);
@@ -51,7 +60,7 @@ const Post = ({
             };
         }
     }
-
+    // On component load get if the post was liked by user and get total likes for user
     useEffect(() => {
         const f = async () => {
             localStorage.getItem(id) && setLiked(true);
@@ -60,6 +69,8 @@ const Post = ({
         }
         f();
     }, []);
+    // WHenever the component gets out of focus then get if the post id is present in local storage or not. If the state of like is different 
+    // in the state variable and local storage then update the local storage and database. This stops too much api requests.
     const offFocus = async () => {
         if (liked && !localStorage.getItem(id)) {
             localStorage.setItem(id, id);

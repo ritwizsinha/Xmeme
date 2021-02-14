@@ -6,10 +6,12 @@ import { SERVER_URL } from '../../constants';
 import axios from 'axios';
 
 const CreatePost = () => {
+    // State controlling the visiblity of modal
     const [open, setOpen] = useState(false);
+    // Post function to be passed to the modal as an action performing a new meme post
     const post = async (name, url, caption) => {
         try {
-            await axios.post(`${SERVER_URL}/memes?`, {
+            await axios.post(`${SERVER_URL}/memes`, {
                 name,
                 url,
                 caption,
@@ -18,7 +20,8 @@ const CreatePost = () => {
                 
             }
         } catch(err) {
-            if (err && err.message === "Request failed with status code 409") {
+            console.log(err);
+            if (err && err.statusCode === 409) {
                 return {
                     error: 'Duplicate post present'
                 }
@@ -31,6 +34,7 @@ const CreatePost = () => {
     const close = () => setOpen(false)
     return (
         <>
+        {/* The add meme post button */}
             <div className="fab" onClick={() => setOpen(true)}>
                 +
             </div>

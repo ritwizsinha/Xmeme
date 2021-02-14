@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 import Logo from '../../public/close.svg';
-
+// Header component containing the Logo title and search text
 const Header = ({ text, setText }) => {
     return (
         <div className="header">

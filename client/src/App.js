@@ -9,9 +9,13 @@ import { NotificationContainer } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 function App() {
+
+  // Making global state for searchedText, posts and api state
   const [searchText, setSearchText] = useState('');
   const [posts, setPosts] = useState([]);
   const [state, setState] = useState(STATE.LOADING);
+
+  // Function for loading memes by posting a get request
   const loadMemes = useCallback(async () => {
     try {
       const res = await axios.get(`${SERVER_URL}/memes`);
@@ -22,10 +26,12 @@ function App() {
     }
   }, []);
 
+  // Loading memes when component loads
   useEffect(() => {
     loadMemes();
   }, [loadMemes]);
   return (
+    // Providing context or global state to the app
     <PostContext.Provider value={{
       state,
       posts,

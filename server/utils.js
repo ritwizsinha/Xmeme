@@ -1,4 +1,6 @@
 const got = require('got');
+
+// Getting the ip from requests.
 const getIpFromReq = (req) => {
     const ip = req.headers['x-forwarded-for'] ||
         req.connection.remoteAddress ||
@@ -7,6 +9,7 @@ const getIpFromReq = (req) => {
     return ip;
 }
 
+// Checking if the specified url is a valid image url
 const checkValidUrl = async (url) => {
     const validImageTypes = [
         "image/gif",
