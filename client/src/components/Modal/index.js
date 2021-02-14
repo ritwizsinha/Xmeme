@@ -1,7 +1,10 @@
-import React, { useState, useRef, useContext, useEffect} from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import ReactDOM from 'react-dom';
 import './style.css';
 import { PostContext } from '../../Context';
+import { NotificationManager } from 'react-notifications';
+import axios from 'axios';
+
 function Modal({
     isOpen,
     close,
@@ -12,25 +15,24 @@ function Modal({
     edit,
 }) {
     const loadMemes = useContext(PostContext).loadMemes;
-    const name = useRef(nm);
-    const url = useRef(u);
-    const caption = useRef(cp);
-    const [error, setError] = useState('');
-    const [saveSuccess, setSaveSuccess] = useState(false);
-    const [showResponse, setShowResponse] = useState(false);
-    const Input = ({ refr, type, placeholder, title }) => {
+    const [url, setUrl]= useState(u);
+    const [name, setName] = useState(nm);
+    const [caption, setCaption] = useState(cp);
+
+    const [memeUrls, setMemeUrls] = useState([]);
+    const Input = useCallback(({ val, setValue, type, placeholder, title }) => {
         return (
             <div className="modal_input">
                 <div className="input_title">{title}</div>
                 <div className="input_box_container">
-                    <input type={type} placeholder={placeholder} defaultValue={refr.current} onChange={(e) => refr.current = e.target.value} className="input_box_2" />
+                    <input type={type} placeholder={placeholder} value={val} onChange={(e) => setValue(e.target.value)} className="input_box_2" />
                 </div>
             </div>
         )
 
-    }
+    }, [])
 
-    const Button = ({ action, placeholder }) => {
+    const Button = ({ action, placeholder }) => {   
         return (
             <div className="btn">
                 <div onClick={action}>
@@ -41,83 +43,73 @@ function Modal({
     }
 
     const postAction = async () => {
-        setShowResponse(true);
-        setTimeout(() => {
-            setShowResponse(false);
-            setError(false);
-            setSaveSuccess(false);
-        }, 2000);
-        if (name.current && url.current && caption.current) {
-            const res = await post(name.current, url.current, caption.current);
+        if (name && url && caption) {
+            const res = await post(name, url, caption);
             if (res.error) {
-                setError(res.error);
+                NotificationManager.error(res.error);
             } else {
-                setSaveSuccess(true);
-                setTimeout(async () => {
-                    await loadMemes();
-                    close();
-                }, 2000);
+                NotificationManager.success('Saved successfully');
+                await loadMemes();
+                close();
             }
         } else {
-            setError("All fields are not filled");
+            NotificationManager.error("All fields are not filled");
         }
-    }
-    const showResponseMessage = () => {
-        if (showResponse) {
-            if (error) {
-                return (
-                    <div className="error">
-                        {error}
-                    </div>
-                )
-            } else if (saveSuccess) {
-                return (
-                    <div className="success">
-                        Posted Successfully!
-                    </div>
-                )
-            }
-        }
-        return null;
     }
 
     useEffect(() => {
-        return () => {
-            name.current = '';
-            url.current = '';
-            caption.current = '';
+        const f = async () => {
+            const { data }  = await axios.get('https://api.imgflip.com/get_memes');
+            if (data && data.success) {
+                setMemeUrls(data.data.memes.map(({ url }) => url));
+            } else {
+                NotificationManager.error('Error in loading meme urls');
+            }
         }
+        f();
     }, [])
     if (isOpen) {
         return ReactDOM.createPortal(
             <>
-                <div className="overlay_modal" />
+                <div className="overlay_modal" onClick={close} />
                 <div className="content_modal">
-                    <div className="modal_header">
-                        Create a Meme Post
+                    <div className="modal_content_input">
+                        <div className="modal_header">
+                            {edit ? 'Edit the' : 'Create a'} Meme Post
                     </div>
-                    <div className="modal_content">
-                        {!edit && <Input
-                            type="text"
-                            title="Add name"
-                            placeholder="Add a name..."
-                            refr={name}
-                        />}
-                        <Input
-                            type="url"
-                            title="Add Image Url"
-                            placeholder="Add image url..."
-                            refr={url}
-                        />
-                        <Input
-                            type="text"
-                            title="Add Caption"
-                            placeholder="Add a caption..."
-                            refr={caption}
-                        />
-                        {showResponseMessage()}
-                        <Button action={postAction} placeholder={"Post"} />
-                        <Button action={close} placeholder={"Cancel"} />
+                        <div className="modal_content">
+                            {!edit && <Input
+                                type="text"
+                                title="Add name"
+                                placeholder="Add a name..."
+                                val={name}
+                                setValue={setName}
+                            />}
+                            <Input
+                                type="url"
+                                title="Add Image Url"
+                                placeholder="Add image url..."
+                                val={url}
+                                setValue={setUrl}
+                            />
+                            <Input
+                                type="text"
+                                title="Add Caption"
+                                placeholder="Add a caption..."
+                                val={caption}
+                                setValue={setCaption}
+                            />
+                            <Button action={postAction} placeholder={"Post"} />
+                            <Button action={close} placeholder={"Cancel"} />
+                            <Button action={() => {
+                                setUrl(memeUrls[Math.floor((Math.random()*memeUrls.length-1))] || u)
+                            }} placeholder={"Load random url"}/>
+                        </div>
+                    </div>
+                    <div className="modal_image_preview">
+                            <div className="image_container">
+                            { (url || u) && <img src={url || u} /> }
+                            </div>
                     </div>
 
                 </div>

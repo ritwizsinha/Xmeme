@@ -1,4 +1,4 @@
-export const SERVER_URL = 'http://localhost:5000';
+export const SERVER_URL = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 'http://localhost:8081': 'https://xmeme-api-server.herokuapp.com';
 export const STATE = {
     LOADING: 0,
     LOADED: 1,

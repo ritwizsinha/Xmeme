@@ -5,6 +5,8 @@ import { STATE } from '../src/constants';
 import { PostContext } from './Context';
 import axios from 'axios';
 import { SERVER_URL } from './constants';
+import { NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 function App() {
   const [searchText, setSearchText] = useState('');
@@ -31,6 +33,7 @@ function App() {
       loadMemes,
     }
     }>
+      <NotificationContainer />
       <Header text={searchText} setText={setSearchText} />
       <Container />
     </PostContext.Provider>

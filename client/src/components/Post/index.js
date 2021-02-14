@@ -6,6 +6,7 @@ import { SERVER_URL } from '../../constants';
 import axios from 'axios';
 import loadingGIF from '../../public/Loading.gif';
 import errorGIF from '../../public/error.gif';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 
 const Post = ({
     id,
@@ -39,17 +40,11 @@ const Post = ({
             }
         }
     }
-    const triggerLike = async () => {
-        try {
-            await axios.post(`${SERVER_URL}/like/${id}`, {});
-        } catch(err) {
-            console.error(err);
-        }
-    }
+
     const getLikes = async () => {
         try {
             return await axios.get(`${SERVER_URL}/like/${id}`);
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             return {
                 likes: 0,
@@ -57,40 +52,45 @@ const Post = ({
         }
     }
 
-    const getUserLiked = async () => {
-        try {
-            return await axios.get(`${SERVER_URL}/like/me/${id}`);
-        } catch(err) {
-            return {
-                liked: false,
-            }
-        }
-    }
     useEffect(() => {
         const f = async () => {
-            let res = await getUserLiked();
-            if (res.data.liked) {
-                setLiked(true);
-            }
-            res = await getLikes();
+            localStorage.getItem(id) && setLiked(true);
+            const res = await getLikes();
             setTotalLikes(res.data.likes);
         }
         f();
     }, []);
+    const offFocus = async () => {
+        if (liked && !localStorage.getItem(id)) {
+            localStorage.setItem(id, id);
+            try {
+                await axios.post(`${SERVER_URL}/like/${id}`);
+            } catch (err) {
+                NotificationManager.error('Error in liking post');
+            }
+        } else if (!liked && localStorage.getItem(id)) {
+            localStorage.removeItem(id);
+            try {
+                await axios.post(`${SERVER_URL}/unlike/${id}`);
+            } catch (err) {
+                NotificationManager.error('Error in liking post');
+            }
+        }
+    }
     return (
         <>
-            <div className="post_container">
+            <div className="post_container" onMouseOut={offFocus}>
                 <div className="post_caption">
                     {caption}
                 </div>
                 <div className="post_image">
                     {error &&
                         <div>
-                            <img src={errorGIF} alt="Gif showing error message in a terminalesque way"/>
+                            <img src={errorGIF} alt="Gif showing error message in a terminalesque way" />
                         </div>}
                     {!loaded && (
                         <div>
-                            <img src={loadingGIF} alt="Gif showing a container containing moving liquid"/>
+                            <img src={loadingGIF} alt="Gif showing a container containing moving liquid" />
                         </div>
                     )}
                     <img src={url} alt="post meme" onLoad={() => setLoaded(true)} onError={() => {
@@ -102,22 +102,20 @@ const Post = ({
                     Posted By: {name}
                 </div>
                 <div className="post_likes">
-                    {liked ? `You and ${totalLikes} others` : `${totalLikes} people` } liked this
+                    {liked ? `You and ${totalLikes} others` : `${totalLikes} people`} liked this
             </div>
                 <div className="post_actions">
-                    <div className={liked ? "action_like_selected" : "action_like"} onClick={() => setLiked(async (liked) => {
-                        await triggerLike();
-                        console.log("This runs");
-                        return !liked
-                    })} >
-                        Like
+                    <div className={liked ? "action_like_selected" : "action_like"} onClick={() => {
+                        setLiked(liked => !liked);
+                    }} >
+                        +1
                 </div>
                     <div className="action_edit" onClick={() => setOpen(true)}>
-                        Edit
+                        Edeeet !!!!
                     </div>
                 </div>
             </div>
-            <Modal isOpen={open} caption={caption} close={() => setOpen(open => !open)} name={name} url={url} key={id} post={post} edit={true}/>
+            <Modal isOpen={open} caption={caption} close={() => setOpen(open => !open)} name={name} url={url} key={id} post={post} edit={true} />
         </>
     )
 }

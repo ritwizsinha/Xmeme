@@ -1,4 +1,4 @@
 #!/bin/bash
 cd server/
 npm install
-npm start
+npm run dev

@@ -31,8 +31,8 @@ const CreatePost = () => {
     const close = () => setOpen(false)
     return (
         <>
-            <div className="create_post_container" onClick={() => setOpen(true)}>
-                Post a Meme
+            <div className="fab" onClick={() => setOpen(true)}>
+                +
             </div>
             <Modal isOpen={open} close={close} post={post} name={''} url={''} caption={''} edit={false}/>
         </>

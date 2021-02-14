@@ -3,40 +3,51 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
-const SERVER_URL="http://localhost:8081"
-const SWAGGER_URL="http://localhost:8080"
-const DATABASE_URL="mongodb://localhost:27017"
-const SWAGGER_PORT = 8080
-const PORT=8081
+const swaggerJson = require('./swagger.json');
+const config = require('./config');
 
-const swaggerOptions = {
-    swaggerDefinition: {
-        info: {
-            title: 'XMeme API',
-            version: '1.0.0'
-        },
-        servers: ['http://localhost:8081'],
-        host: 'localhost:8081',
-    },
-    apis: ['./routes/Post.js', './routes/Like.js'],
-};
-swaggerDocument = swaggerJSDoc(swaggerOptions);
-console.log(JSON.stringify(swaggerDocument, null, 2));
+// console.log(config);
+// const swaggerOptions = {
+//     swaggerDefinition: {
+//         info: {
+//             title: 'XMeme API',
+//             version: '1.0.0'
+//         },
+//         servers: ['http://localhost:8081'],
+//         host: 'localhost:8081',
+//     },
+//     apis: ['./routes/Post.js', './routes/Like.js'],
+// };
+
+
 const app = express();
-const swaggerApp = express();
+if (process.env.NODE_ENV === 'production') {
+    // Swagger app will use same app but different route in production
+    console.info('Swagger started in production');
+    swaggerJson.host = config.SWAGGER_HOST;
+    app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerJson));
+} else {
+    // Swagger app runs as separate app on a different port locally and in docker
+    const swaggerApp = express();
+    swaggerApp.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerJson));
+    swaggerApp.use(cors());
+    swaggerApp.listen(8080, () => {
+        console.log('Swagger up and running on ' + 8080)
+    });
 
-swaggerApp.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+}
+
 // const corsOptions = {
 //     origin: 'http://localhost:3000',
 //     credentials:true,            //access-control-allow-credentials:true
 //     optionSuccessStatus:200
 // };
 app.use(cors());
-swaggerApp.use(cors());
-require('dotenv').config();
-mongoose.connect(DATABASE_URL, {
+
+mongoose.connect(process.env.MONGO_URI || config.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
 })
 
 const db = mongoose.connection;
@@ -51,11 +62,11 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 const postMiddleware = require('./routes/Post');
-const likeMiddleware = require('./routes/Like');
 app.use(postMiddleware);
-app.use(likeMiddleware);
-
-swaggerApp.listen(SWAGGER_PORT, () => {
-    console.log('Swagger up and running on '+ process.env.SWAGGER_PORT)
+app.get('*', function (req, res) {
+    res.status(404).json({
+        messsage: 'Undefined path'
+    });
 });
-app.listen(PORT, () => console.log('Server started'));
+
+app.listen(process.env.PORT || config.SERVER_PORT, () => console.log('Server started on port ' + (process.env.PORT || config.SERVER_PORT)));
