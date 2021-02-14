@@ -23,7 +23,6 @@ const checkValidUrl = async (url) => {
     ];
     try {
         const response = await got(url);
-        console.log(response.statusCode, response.headers['content-type']);
         if (response.statusCode === 200 && validImageTypes.includes(response.headers['content-type'])) {
             return true;
         } 
