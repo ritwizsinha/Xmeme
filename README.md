@@ -1,7 +1,7 @@
 ## X-MEME
-A platform for users to match the hilarious imemeges to their even more hilarious captions.
+A platform for users to match the hilarious images to their even more hilarious captions.
 The [app](https://xmemeclient.herokuapp.com/) can be found here.
-The [server](https://xmeme-api-server.herokuapp.com/) can be found here.
+The [server](https://xmeme-api-server.herokuapp.com/swagger-ui/) swagger endpoint can be found here.
 <div>
 <img src="./client/public/cover.png" width=800px height=600px>
 </div>
