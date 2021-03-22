@@ -27,7 +27,7 @@ For local development and testing
 
 - clone the repo
 ```
-git clone https://gitlab.crio.do/COHORT_ME_BUILDOUT_XMEME_ENROLL_1612436694845/ritwizsinha0-me_buildout_xmeme.git
+git clone https://github.com/ritwizsinha/Xmeme.git
 
 ```
 - Start the server
